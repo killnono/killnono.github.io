@@ -1,11 +1,11 @@
 # Site settings
-title: killnono
+title: killnono's Blog
 email: ckcanfly@gmail.com
-description: "NONO's BLOGS"
+description: "NONO's BLOG"
 baseurl: ""
-url: "http://blog.guanghe.tv"
+url: "http://blog.killnono.com"
 twitter_username: nonolilith
-github_username:  nonolilith
+github_username:  killnono
 
 # Build settings
 markdown: redcarpet
