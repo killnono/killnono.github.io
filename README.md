@@ -1,5 +1,5 @@
 # killnono.github.io
 Nono DEV Blog
-:laugh:
+:smile:
  
 GitHub+Jekyll+Markdown+Disqus
