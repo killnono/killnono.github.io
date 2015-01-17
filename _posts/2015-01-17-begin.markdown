@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Hello World"
+title:  "begin blog"
 categories: funny
 author: "killnono"
 ---
@@ -9,6 +9,7 @@ author: "killnono"
 
 ```java
 {
-   printf("Hello World!");
+   printf("准备开始写博客了");
 }
 ```
+
