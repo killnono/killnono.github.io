@@ -35,11 +35,14 @@ If you truly want parallel execution, you can invoke executeOnExecutor(java.util
 
 AsyncTasks在执行是，在单个后台线程中有序执行。DONUT版本后改成线程池了，HONEYCOMB后，默认又改成单个后台线程有序执行，也加入了对线程池的支持**executeOnExecutor**
 ####We can do it like this
-````java
- Executor exec = new ThreadPoolExecutor(5, 10, 10,
-                TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-        mTask.executeOnExecutor(exec);
-````
+
+```java
+protected Void doInBackground(Object... params) {
+    while(true){
+    //do someting
+    }
+}
+```
 
 ###Tips:
 看文档是还看到关于其线程规则：
