@@ -14,7 +14,7 @@ AsyncTask的应用Doc上写的比较明确，用于独立与UI主线程处理一
 
 ###AsyncTask阻塞的问题
 同事开启执行多个AsyncTask任务时，比如A的doingbackground中实现了一个while无线循环的任务<比如隔几秒检查的Watcher任务或是循环任务>
-发现在A之后加入的AsyncTask任务，都堵塞住了。
+发现在A之后加入的AsyncTask任务，都堵塞住了.  
 ````java
 protected Void doInBackground(Object... params) {
 while (tag) {
