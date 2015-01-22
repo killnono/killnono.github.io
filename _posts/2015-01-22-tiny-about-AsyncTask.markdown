@@ -16,13 +16,11 @@ AsyncTask的应用Doc上写的比较明确，用于独立与UI主线程处理一
 同事开启执行多个AsyncTask任务时，比如A的doingbackground中实现了一个while无线循环的任务<比如隔几秒检查的Watcher任务或是循环任务>
 发现在A之后加入的AsyncTask任务，都堵塞住了。
 ```java
-{
-   protected Void doInBackground(Object... params) {
-        while (tag) {
-        	//do someting
-            }
+protected Void doInBackground(Object... params) {
+  while (tag) {
+      	//do someting
+     }
    }
-}
 ```
 
 过了遍源代码，发现AsyncTask的机制是一个全局的异步队列，每次值执行一个任务。
@@ -47,7 +45,7 @@ AsyncTasks在执行是，在单个后台线程中有序执行。DONUT版本后�
 看文档是还看到关于其线程规则：
 ####**Threading rules**
 There are a few threading rules that must be followed for this class to work properly: 
------
+-------------
 + The AsyncTask class must be loaded on the UI thread. This is done automatically as of JELLY_BEAN.
 + The task instance must be created on the UI thread.
 execute(Params...) must be invoked on the UI thread.
