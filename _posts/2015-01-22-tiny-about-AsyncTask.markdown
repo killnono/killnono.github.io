@@ -24,7 +24,7 @@ protected Void doInBackground(Object... params) {
 ```
 
 过了遍源代码，发现AsyncTask的机制是一个全局的异步队列，每次值执行一个任务。
-所以A没执行玩，A后面的任务都是出于等待状态。
+所以A没执行完，A后面的任务都是出于等待状态。
 
 ###解决问题
 android  关于asyncTask的 doc文档：
