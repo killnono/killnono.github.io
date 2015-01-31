@@ -45,8 +45,7 @@ AsyncTasks在执行是，在单个后台线程中有序执行。DONUT版本后�
 ###Tips:
 看文档是还看到关于其线程规则：
 ####**Threading rules**
-There are a few threading rules that must be followed for this class to work properly:
- 
+There are a few threading rules that must be followed for this class to work properly: 
 + The AsyncTask class must be loaded on the UI thread. This is done automatically as of JELLY_BEAN.
 + The task instance must be created on the UI thread.
 execute(Params...) must be invoked on the UI thread.
