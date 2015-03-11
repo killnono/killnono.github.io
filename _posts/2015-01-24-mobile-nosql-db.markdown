@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Android平台NoSql数据库选择和使用"
+title:  "浅谈 NoSql for Android platform"
 categories: android,nosql,realm,couchbase
 author: "killnono"
 ---
@@ -14,7 +14,6 @@ author: "killnono"
 + SimpleNoSql.
 + couchbase
 
-tips:以下基于Android开发角度
 
 ###Why Use Nosql on Moblie Platform
 说到在我们的mobile应用中使用Nosql需求: 
@@ -31,7 +30,7 @@ tips:以下基于Android开发角度
 1. 保持客户端和服务端数据存储模型的统一性,无需载设计关系型数据库模型(便洁)。
 2. 相对来说直接文本和偏好存储，毕竟专业的nosql数据库具有更好更效率的数据操作。 
 
-###目前几个Nosql数据的概述
+###关于目前可用的几个Nosql数据的概述
 #####Reaml  
  Realm ,支持Android和IOS+OSX，Realm for Android 2014.9.30,Realm相对来来说可能算是比较新的一个数据库框架。以Object或是Array形式对数据序列化存储，因为其早期开发的是IOS版本针对coredata存储的改进，所以基本概念中又很多ORM的感觉。  
  根据[Realm的官方文档](http://realm.io/docs/java/0.78.0/)教程实践时一般会出现几个问题。  
@@ -50,7 +49,7 @@ During compilation of your app, the model classes are processed and proxy classe
 ````
 io.realm.exceptions.RealmMigrationNeededException: Field 'name' not found for type 'YourBean' 
 ````
-卸载下app清除老的realmdb，重新运行就ok了。
+卸载下app清除旧的realmdb，重新运行就ok了。
 
 从各种情况来看，reaml比较的新颖，从gitbub上数据来看，star和开发维护都是比较hot。而且官方支持文档也比较齐全。
 
@@ -92,8 +91,11 @@ Gson gson = new GsonBuilder()
 简单的解决方案是，在需要设置自己的_id时，在创建Document时使用 
  
 ````
-Document document = database.getDocument("_myid2123");
+Document document = database.getDocument("myid2123");
 ````
+
+基于自定义的_id来获取或创建一个Document,也就可以实现默认_id带来的问题，
+当让前提是我们设计定义_id是需要有唯一性的。
 
 #####SimpleNoSql.
 略，直接看[其github和文档](https://github.com/Jearil/SimpleNoSQL)
