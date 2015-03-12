@@ -27,7 +27,7 @@ author: "killnono"
 
 综合的来说:
 
-1. 保持客户端和服务端数据存储模型的统一性,无需载设计关系型数据库模型(便洁)。
+1. 保持客户端和服务端数据存储模型的统一性,无需在设计关系型数据库模型(便洁)。
 2. 相对来说直接文本和偏好存储，毕竟专业的nosql数据库具有更好更效率的数据操作。 
 
 ###关于目前可用的几个Nosql数据的概述
@@ -43,7 +43,7 @@ Caused by: io.realm.exceptions.RealmException: Could not find the generated prox
 >官方FAQ:  
 What does the exception ‘Annotation processor may not have been executed.’ mean?  
 During compilation of your app, the model classes are processed and proxy classes are generated. If this annotation process fails, the proxy classes or their methods cannot be found. When your app begins running, it Realm will throw exception with message ‘Annotation processor may not have been executed.’. You may see this in case you use Java 6 as it doesn’t support inheriting annotations. You then have to add @RealmClass before your models. Otherwise it can often be solved by removing/cleaning all generated or intermediate files and rebuild.  
-简单的说就是jdk<7的情况下会出现该问题，需要载realmObject前添加注解@RealmClass.
+简单的说就是jdk<7的情况下会出现该问题，需要在realmObject前添加注解@RealmClass.
 
 接下来可能会出现的问题是
 
@@ -84,7 +84,7 @@ Gson gson = new GsonBuilder()
 ----
 简单粗暴的kv存储模式，可以直接存储一个对象（其机制会帮助你序列化）.假设我有一个同类型的对象数据集，
 那么只能以array形式存储；查询的时候目前只能根据key值来读取，假设我只需要读取array集合里的某个对象，
-那么会载取出整个array集合，然后再自己检索（目前从提供的简单的API来看只支持key查询,有兴趣的可以看看具体代码），个人觉得，是sharepreference的一个加强版，从他测试的数据图来说，效率还可以,使用也很简单。
+那么会再取出整个array集合，然后再自己检索（目前从提供的简单的API来看只支持key查询,有兴趣的可以看看具体代码），个人觉得，是sharepreference的一个加强版，从他测试的数据图来说，效率还可以,使用也很简单。
 
 #####**couchbase**
 ----
