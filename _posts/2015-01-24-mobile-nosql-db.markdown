@@ -31,7 +31,7 @@ author: "killnono"
 2. 相对来说直接文本和偏好存储，毕竟专业的nosql数据库具有更好更效率的数据操作。 
 
 ###关于目前可用的几个Nosql数据的概述
-#####Reaml
+#####**Reaml**
 ----
  Realm ,支持Android和IOS+OSX，Realm for Android 2014.9.30,Realm相对来来说可能算是比较新的一个数据库框架。以Object或是Array形式对数据序列化存储，因为其早期开发的是IOS版本针对coredata存储的改进，所以基本概念中又很多ORM的感觉。  
  根据[Realm的官方文档](http://realm.io/docs/java/0.78.0/)教程实践时一般会出现几个问题。  
@@ -80,17 +80,18 @@ Gson gson = new GsonBuilder()
 
 但是对于比较复杂的数据存储，比如需要支持对象里面包涵对象，该类也需要是先realmobject;比如list类型的需要是使用reaml提供的reamllist容器。
 
-#####SnappyDB  
+#####**SnappyDB** 
 ----
 简单粗暴的kv存储模式，可以直接存储一个对象（其机制会帮助你序列化）.假设我有一个同类型的对象数据集，
 那么只能以array形式存储；查询的时候目前只能根据key值来读取，假设我只需要读取array集合里的某个对象，
 那么会载取出整个array集合，然后再自己检索（目前从提供的简单的API来看只支持key查询,有兴趣的可以看看具体代码），个人觉得，是sharepreference的一个加强版，从他测试的数据图来说，效率还可以,使用也很简单。
 
-#####couchbase
+#####**couchbase**
 ----
 从mobile平台的nosql数据库来看，couchbase算比较提及的比较多。  
 支持android，java，ios等多个平台和语言,基于文档形式的存储。
-但是,其存储接口提供还是需要转为map才能存储，不支持直接json存储。
+但是,其存储接口提供还是需要转为map才能存储，不支持直接JSON存储,虽然它提到最后是已JSON格式存储，
+但是暴露在API接口上接受的是map。
 文档默认都会生成一个_id,_rev字段,这在做缓存时会导致和我们本身的一些数据中的_id冲突(目前来看是_id被它自动覆盖了,并且只会发生在文档的最外层的_id)。
 简单的解决方案是，在需要设置自己的_id时，在创建Document时使用 
  
@@ -103,19 +104,19 @@ Document document = database.getDocument("myid2123");
 
 couchbase基本使用步骤:  
 
-1. 根据上下文获取一个Manager
++ step1:根据上下文获取一个Manager
 
 ````
 manager = new Manager(new AndroidContext(mContext), Manager.DEFAULT_OPTIONS);
 ````  
 
-2. 通过指定的数据库名获取指定数据库  
++ step2:通过指定的数据库名获取指定数据库  
 
 ````
 this.db = manager.getDatabase("my-database");
 ````  
 
-3. 创建一条记录写入数据库
++ step3:创建一条记录写入数据库
 
 ````  
 Map<String, Object> properties = new HashMap<String, Object>();
@@ -129,9 +130,9 @@ Document document = database.createDocument();
 document.putProperties(properties);
  ````  
 
-具体的深度可以则可以考虑如何处理并发,锁机制,索引，视图等概念。
+具体的深度则可以考虑如何处理并发,锁机制,索引，视图等概念。
 
-#####SimpleNoSql.
+#####**SimpleNoSql**
 ----
 略，直接看[其github和文档](https://github.com/Jearil/SimpleNoSQL)
 
