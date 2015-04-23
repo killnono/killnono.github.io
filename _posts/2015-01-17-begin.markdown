@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "begin blog"
+title:  "[未完成]如何做androidUI适配的初期工作"
 categories: funny
 author: "killnono"
 ---

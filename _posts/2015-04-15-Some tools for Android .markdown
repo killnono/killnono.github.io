@@ -41,4 +41,29 @@ tips：
 
 ###二.Android lint代码检测工具
 
+ [lint Google 官方](https://developer.android.com/tools/help/lint.html)
+ 
+ Lint 是在Adt16后引入的一款代码静态分析工具，目的是为了帮组开发者在代码书写的早期阶段,就发现和修正一些问题警告和错误问题，同时也规范代码书写样式样式，检测开发过程中冗余的(unused)数据资源和代码类、变量等。
+ 
+ **如何使用:** 
+ 
+ 在Android studio中,Lint工具直接集成在ide里面。
+ 并且其实在你书写代码的工程中，无形中已经开始使用了，比如你编辑器右端的一些淡黄色tag和对应行的代码会显示警告，提醒，建议等辅助功能，并且载build是回自动的执行代码检测。
+ 手动执行lint，在菜单栏中-->Analyze-->inspect Code ，runing完后就可以在console视图查看检测出的问题。
+ 几个常用检测标签
+ 
+ + Unused resources:未使用资源；  
+ + Class is not register in manifest:组件未注册；
+ + Class structure: 类结构的问题
+ + Text size is too small: 居然还有提醒可能字体设置太小问题（当然这个最后还是按照UI设计和视觉来定夺）
+ + Handler reference leak: handler 泄露问题~
+ + Threading issue: 线程问题
+ + 甚至还有spelling，单词拼写问题。
+ + 其他
+ 
+个人觉得lint也可做code review中的代码静态检查,保持代码的规范，整洁,安全和优雅。
+ 
+ 
+ 
+ 
  
