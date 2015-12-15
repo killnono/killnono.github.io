@@ -177,15 +177,6 @@
 
     
     
-      
-      
-        
-        
-        
-      
-
-      
-    
 
     
       
@@ -209,8 +200,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/12/15/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2015/04/22/2015-04-22-ycmath_1.2/" itemprop="url">
+                  洋葱数学Android V1.2版本总结
                 </a>
               
             
@@ -220,11 +211,26 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-15T11:27:37+08:00" content="2015-12-15">
-              2015-12-15
+            <time itemprop="dateCreated" datetime="2015-04-22T00:00:00+08:00" content="2015-04-22">
+              2015-04-22
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/android-yamath/" itemprop="url" rel="index">
+                    <span itemprop="name">android,yamath</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -247,15 +253,100 @@
         
           <span itemprop="articleBody">
             
-              <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+              <p>提纲</p>
+<hr>
+<ol>
+<li><strong>必要的趟坑</strong></li>
+<li><strong>app设计结构上进一步分层</strong></li>
+<li><strong>数据输出接口&amp;缓存策略实现</strong></li>
+<li><strong>客户端实现的数据迁移</strong> </li>
+<li><strong>视频下载&amp;管理</strong> </li>
+<li><strong>Gradle多渠道自动打包&amp;自定义apk名</strong></li>
+</ol>
+<h3 id="u4E00-_u5FC5_u8981_u7684_u8D9F_u5751"><a href="#u4E00-_u5FC5_u8981_u7684_u8D9F_u5751" class="headerlink" title="一.必要的趟坑"></a>一.必要的趟坑</h3><hr>
+<p>在正式PRD出来前，产品会和技术这边有个概念性和开放性的需求预期。<br>所以开发可以根据需求的预期，撇开业务，抽象成技术点.</p>
+<ul>
+<li>数据缓存</li>
+<li>视频离线&amp;管理</li>
+</ul>
+<p><strong>数据缓存</strong><br>数据缓存，最基本的点就是缓存容器的选择。<br>在考虑数据结构，灵活性，方便性上的平衡。<br>mobile&amp;nosql&amp;multi-platform<br>趟了差不多一周坑，基本确认<a href="http://dev.guanghe.tv/2015/03/mobile-nosql-db.html" target="_blank" rel="external">Android上nosql平台选择</a>.</p>
+<p><strong>视频下载&amp;管理</strong><br>这个功能模块的基本点是，断点续传，数据库，网络，线程等.<br>早期是想用Android自带的downloadmanager来实现，但是最后发现其在管理上提供的的接口太少。<br>比较适合给app升级模块下载apk使用~要有比较主动性管理下载内容，会有一些坑.<br>系统的api暂时pass，那么找网上一些开源代码，断点的功能现在网络上其实一抓一大把,但是考虑到稳定性，以及扩展性，最后是选择了选择了Android downloadprovider模块源码，来实现了下载管理功能（当然，因为找到是2.3的源码，后期同事在开发中又他做了一些扩展和优化）,但是至少在争论和必要的尝试性下，确定了最终方案。  </p>
+<h3 id="u4E8C-APP_u8BBE_u8BA1_u7ED3_u6784_u4E0A_u7684_u8FDB_u4E00_u6B65_u5206_u79BB"><a href="#u4E8C-APP_u8BBE_u8BA1_u7ED3_u6784_u4E0A_u7684_u8FDB_u4E00_u6B65_u5206_u79BB" class="headerlink" title="二.APP设计结构上的进一步分离"></a>二.APP设计结构上的进一步分离</h3><hr>
+<p> <strong>洋葱数学设计结构:</strong></p>
+<p> <em>APP在1.1版本简单结构</em></p>
+<hr>
+<ul>
+<li>（第一层）应用上层: UI(Avtivity,Fragment,View,) &amp; 管理工具类(manager,utils) &amp; 插件支持(support).</li>
+<li>（第二层）核心层core层:数据获取和处理接口模块(Titan) &amp; 视频播放功能模块(Mediaplayer) </li>
+<li>（第三层）网络数据层 :网络请求。</li>
+</ul>
+<p>第一层基本:  </p>
+<ol>
+<li>获取到数据然后展示到视图  </li>
+<li>期间在UI交互和数据的二次转换上获取上提供一些管理类和帮助类.</li>
+<li>第三方插件的支持类&amp;辅助类。</li>
+</ol>
+<p>第二层</p>
+<ol>
+<li>暴露一个数据接口给第一层,根据输入需要的数据类型（基本就是API）,调用数据层处理后输出给上层.</li>
+<li>预留数据缓存功能。</li>
+<li>其他一些核心功能机制模块。</li>
+</ol>
+<p>第三层 </p>
+<ol>
+<li>数据层简单到只有一个网络请求管理类(netData)和偏好数据管理类</li>
+</ol>
+<p><em>APP在1.2版本结构</em></p>
+<hr>
+<p>第一层:不变</p>
+<p>第二层:</p>
+<ol>
+<li>暴露的数据接口层（在结构上不变，功能上有变动）</li>
+<li><code>数据获策略层</code>（新增数据获取策略层,针对新加的缓存功能）</li>
+<li>不变</li>
+</ol>
+<p>第三层:</p>
+<ol>
+<li>网络数据层</li>
+<li><code>本地数据层</code></li>
+</ol>
+<p><em>APP在1.3+版本后的构想结构</em></p>
+<hr>
+<p>第一层:不变<br>第二层:<br>新增 </p>
+<ul>
+<li><code>在数据接口层和策略层中间引入一个独立的业务子层（数据接口层完全抽象为一个接口,路由到各自的业务子层,业务子层再来路由数据策略子层 &amp; 数据处理.）tips，保证原来的1.2版本前的上层数据获取都无需改动，但是略显浮夸。也考虑直接将Titan直接分裂成独立的业务处理接口。</code></li>
+</ul>
+<p>第三层: 不变</p>
+<h3 id="u4E09-_u6570_u636E_u8F93_u51FA_u63A5_u53E3_26amp_3B_u7F13_u5B58_u7B56_u7565"><a href="#u4E09-_u6570_u636E_u8F93_u51FA_u63A5_u53E3_26amp_3B_u7F13_u5B58_u7B56_u7565" class="headerlink" title="三.数据输出接口&amp;缓存策略"></a>三.数据输出接口&amp;缓存策略</h3><hr>
+<p><strong>数据输出接口</strong><br>定义数据获取接口Titan,在现在轻业务上场景下，所以直接提供一个最简单的统一接口。<br>Titan在数据获取上又通过缓存策略子层来分担和分离其功能.<br>1.2版本的Titan的功能是数据获取的路由选择 &amp;以及网络数据—》本地数据缓存的处理过滤（数据迁移）。</p>
+<p>之后的扩展可能考虑在通过一个业务处理核心子层来分担Titan,Titan完全作为一个对上层接口存在,Titan根据业务来路由选择相应的业务模块，业务模块根据缓存策略来路由选择数据获取(并且来实现各自的数据迁移功能)。<br>也就是面的 <strong>App结构上的进一步分离</strong>  </p>
+<p><strong>缓存策略</strong><br>保持APP永远有内容分呈现.<br>有网情况:</p>
+<ol>
+<li>先获取本地,有数据，返回状态&amp;缓存数据填充；其他，返回状态。</li>
+<li>请求网络，获取正常返回状态&amp;数据刷新；其他，返回状态。</li>
+</ol>
+<p>无网情况:</p>
+<ol>
+<li>获取本地，有数据，返回状态和缓存数据;其他，返回状态。</li>
+</ol>
+<p>同时在网络请求获取数据上做网络缓存扩展，如果网络获取设置了一个时间间隔，优化频繁刷新带来的网络和流量性能.</p>
+<h3 id="u56DB-_u5BA2_u6237_u7AEF_u5B9E_u73B0_u7684_u6570_u636E_u8FC1_u79FB"><a href="#u56DB-_u5BA2_u6237_u7AEF_u5B9E_u73B0_u7684_u6570_u636E_u8FC1_u79FB" class="headerlink" title="四.客户端实现的数据迁移"></a>四.客户端实现的数据迁移</h3><hr>
+<p>App V1.2版本我们mobile数据库和PC的同步,需要做数据过滤(早期是直接服务端部署一个mobile数据库，定期跑脚本做数据迁移，返回的数据结构就是客户端呈现结构)。<br>数据同步后，返回的数据结构需要客户端来处理和过滤,那么就考虑到这个数据的处理和过滤在那一层来实现。<br>以及我到底存储是原始数据（远程 serverDb 数据），还是处理过滤的数据（即客户端来实现了v1.2版本前,后台实现的数据迁移过程）。 </p>
+<ul>
+<li>原始数据存储的优缺点:利,和pc端数据同步，对后期迭代时数据上一劳永逸, 扩展性更高;弊,每次取出来的数据都需要做处理和过滤，过滤可以做在core层(Titan),或是在上层数据展现到View时做处理（只展示APP结构上需要的）,做在core可能处理会太过频繁时性能问题,在上层做的话,现在改动较大(因为1.2版本在数据结构呈现上基本和1.1版本相同)</li>
+<li>处理过的数据存储优缺点:利，对于上层改动最小;弊,即原始存储的利.</li>
+</ul>
+<p>目前因为迭代时间的问题，取了第二种。具体下个版本再看产品需求来平衡。</p>
+<p>性能上有弊端（现在返回的结构树deep太大）&amp;最小改动优点的平衡。</p>
+<h3 id="u4E94-_u89C6_u9891_u4E0B_u8F7D_26amp_3B_u7BA1_u7406"><a href="#u4E94-_u89C6_u9891_u4E0B_u8F7D_26amp_3B_u7BA1_u7406" class="headerlink" title="五.视频下载&amp;管理"></a>五.视频下载&amp;管理</h3><hr>
+<p>完全可以开一个单独的版来介绍。<br>基本出发点是基于Google的原生下载管理做修改扩展<br>涉及到得技术:Service  &amp; Broadcast &amp; notification &amp; 数据库（contentprovider）&amp; 线程 &amp;线程池 &amp; http网络编程 &amp; 几种设计模式<br>目前实现了基本的下载管理需求，持续迭代。</p>
+<h3 id="u516D-Gradle_u591A_u6E20_u9053_u81EA_u52A8_u6253_u5305"><a href="#u516D-Gradle_u591A_u6E20_u9053_u81EA_u52A8_u6253_u5305" class="headerlink" title="六.Gradle多渠道自动打包"></a>六.Gradle多渠道自动打包</h3><hr>
+<p>脚本解放双手</p>
+<p>配置渠道:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配置渠道</span></span><br><span class="line">   productFlavors &#123;</span><br><span class="line">       _guanghetv &#123;</span><br><span class="line">           manifestPlaceholders = [<span class="string">UMENG_CHANNEL_VALUE:</span> <span class="string">"guanghetv"</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>配置apk name</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义输出的apk名</span></span><br><span class="line">   applicationVariants.all &#123; variant -&gt;</span><br><span class="line">       variant.outputs.<span class="keyword">each</span> &#123; output -&gt;</span><br><span class="line">           <span class="keyword">def</span> outputFile = output.outputFile</span><br><span class="line">           <span class="keyword">if</span> (outputFile != <span class="keyword">null</span> &amp;&amp; outputFile.name.endsWith(<span class="string">'.apk'</span>)) &#123;</span><br><span class="line">               <span class="keyword">def</span> fileName = <span class="string">"YCMath_Android_V$&#123;defaultConfig.versionName&#125;$&#123;variant.productFlavors[0].name&#125;.apk"</span></span><br><span class="line">               output.outputFile = <span class="keyword">new</span> <span class="keyword">File</span>(outputFile.parent, fileName)</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>终端命令<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew assembleRelease</span><br></pre></td></tr></table></figure></p>
 
             
           </span>
@@ -298,7 +389,380 @@
             
               
                 
-                <a class="post-title-link" href="/2014/02/01/mobile-nosql-db/" itemprop="url">
+                <a class="post-title-link" href="/2015/04/15/2015-04-15-Some tools for Android /" itemprop="url">
+                  Some Tools for Android --Genymotion模拟器和lint代码检测工具
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-04-15T00:00:00+08:00" content="2015-04-15">
+              2015-04-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/android-Genymotion-lint/" itemprop="url" rel="index">
+                    <span itemprop="name">android,Genymotion,lint</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>几个关于Android的小工具介绍。 </p>
+<ul>
+<li>Genymotion模拟器—比官方avd更快，功能更完善的，性能高，运行环境配置低。  </li>
+<li>lint代码检测工具—adt16以后就引入的一个工具。检测代码规范，去冗余，代码更优雅更健壮。</li>
+</ul>
+<h3 id="u4E00-Genymotion_u6A21_u62DF_u5668_uFF1A"><a href="#u4E00-Genymotion_u6A21_u62DF_u5668_uFF1A" class="headerlink" title="一.Genymotion模拟器："></a>一.Genymotion模拟器：</h3><p><a href="https://www.genymotion.com/#!/product" target="_blank" rel="external">genymotion官网</a><br>Genymotion与其说是一个Android模拟器工具,更像是一套提供了一套运行Android的虚拟环境。<br>相对于传统的的Google提供的avd，Genymotion提供了更多的模拟器设备型号。</p>
+<p>Genymotion一些优点（官方）:</p>
+<ul>
+<li>速度快性能好，资源占用低，系统要求512MB内存就能运行</li>
+<li>支持 OpenGL 3D加速，可以流畅玩大型3D游戏</li>
+<li>支持同时启动多个模拟器，可以实现软件或游戏多开</li>
+<li>支持多种虚拟传感器，如电池状态、GPS、NFC、重力加速器等模拟，在微信、陌陌之类的App上有特别用处</li>
+<li>支持摄像头、蓝牙等设备</li>
+<li>可以配置模拟器参数，如屏幕分辨率、内存大小、CPU数量</li>
+<li>直接拖拽窗口即可调整画面大小，支持多种分辨率</li>
+<li>能支持几乎全部版本的 Android 系统，2.x 到 4.x 都没问题</li>
+<li>支持直接拖放文件到虚拟设备</li>
+<li>启动速度运行速度都完爆 Android SDK 官方的模拟器</li>
+</ul>
+<p>个人在使用过程中的一些问题：</p>
+<ul>
+<li>流媒体app无法播放(对于作为做一个视频类app，wfk!!).</li>
+<li>兼容性不是很好(当我完全把其当做一个手机来体验时，从app store下载app)</li>
+<li>Unfortunately, [app name] has stopped 出现的频繁~</li>
+</ul>
+<p>tips：<br>安装过程中，需要先安装Virtualbox，否则在直接下载genymotion套件使用时，会显示一些问题。</p>
+<h3 id="u4E8C-Android_lint_u4EE3_u7801_u68C0_u6D4B_u5DE5_u5177"><a href="#u4E8C-Android_lint_u4EE3_u7801_u68C0_u6D4B_u5DE5_u5177" class="headerlink" title="二.Android lint代码检测工具"></a>二.Android lint代码检测工具</h3><p> <a href="https://developer.android.com/tools/help/lint.html" target="_blank" rel="external">lint Google 官方</a></p>
+<p> Lint 是在Adt16后引入的一款代码静态分析工具，目的是为了帮组开发者在代码书写的早期阶段,就发现和修正一些问题警告和错误问题，同时也规范代码书写样式样式，检测开发过程中冗余的(unused)数据资源和代码类、变量等。</p>
+<p> <strong>如何使用:</strong> </p>
+<p> 在Android studio中,Lint工具直接集成在ide里面。<br> 并且其实在你书写代码的工程中，无形中已经开始使用了，比如你编辑器右端的一些淡黄色tag和对应行的代码会显示警告，提醒，建议等辅助功能，并且载build是回自动的执行代码检测。<br> 手动执行lint，在菜单栏中–&gt;Analyze–&gt;inspect Code ，runing完后就可以在console视图查看检测出的问题。<br> 几个常用检测标签</p>
+<ul>
+<li>Unused resources:未使用资源；  </li>
+<li>Class is not register in manifest:组件未注册；</li>
+<li>Class structure: 类结构的问题</li>
+<li>Text size is too small: 居然还有提醒可能字体设置太小问题（当然这个最后还是按照UI设计和视觉来定夺）</li>
+<li>Handler reference leak: handler 泄露问题~</li>
+<li>Threading issue: 线程问题</li>
+<li>甚至还有spelling，单词拼写问题。</li>
+<li>其他</li>
+</ul>
+<p>个人觉得lint也可做code review中的代码静态检查,保持代码的规范，整洁,安全和优雅。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/01/22/2015-01-22-tiny-about-AsyncTask/" itemprop="url">
+                  关于AsyncTask造成阻塞问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-01-22T00:00:00+08:00" content="2015-01-22">
+              2015-01-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/android-tiny/" itemprop="url" rel="index">
+                    <span itemprop="name">android,tiny</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="AsyncTask_u5E94_u7528"><a href="#AsyncTask_u5E94_u7528" class="headerlink" title="AsyncTask应用"></a>AsyncTask应用</h3><p>AsyncTask的应用Doc上写的比较明确，用于独立与UI主线程处理一些耗时操作，防止阻塞。<br>一般集成后，重写backgroud的操作和操作结束后postExe刷新通知UI线程。<br>相对于Handler，更下一个异步的处理机制。</p>
+<h3 id="AsyncTask_u963B_u585E_u7684_u95EE_u9898"><a href="#AsyncTask_u963B_u585E_u7684_u95EE_u9898" class="headerlink" title="AsyncTask阻塞的问题"></a>AsyncTask阻塞的问题</h3><p>同事开启执行多个AsyncTask任务时，比如A的doingbackground中实现了一个while无线循环的任务&lt;比如隔几秒检查的Watcher任务或是循环任务&gt;<br>发现在A之后加入的AsyncTask任务，都堵塞住了. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Void <span class="title">doInBackground</span><span class="params">(Object... params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="comment">//do someting</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>过了遍源代码，发现AsyncTask的机制是一个全局的异步队列，每次值执行一个任务。<br>所以A没执行完，A后面的任务都是出于等待状态。</p>
+<h3 id="u89E3_u51B3_u95EE_u9898"><a href="#u89E3_u51B3_u95EE_u9898" class="headerlink" title="解决问题"></a>解决问题</h3><p>android  关于asyncTask的 doc文档：</p>
+<blockquote>
+<p>Order of execution<br>When first introduced, AsyncTasks were executed serially on a single background thread. Starting with DONUT, this was changed to a pool of threads allowing multiple tasks to operate in parallel. Starting with HONEYCOMB, tasks are executed on a single thread to avoid common application errors caused by parallel execution.<br>If you truly want parallel execution, you can invoke executeOnExecutor(java.util.concurrent.Executor, Object[]) with THREAD_POOL_EXECUTOR.</p>
+</blockquote>
+<p>AsyncTasks在执行是，在单个后台线程中有序执行。DONUT版本后改成线程池了，HONEYCOMB后，默认又改成单个后台线程有序执行，也加入了对线程池的支持<strong>executeOnExecutor</strong></p>
+<h4 id="We_can_do_it_like_this"><a href="#We_can_do_it_like_this" class="headerlink" title="We can do it like this"></a>We can do it like this</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Executor exec = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">5</span>, <span class="number">10</span>, <span class="number">10</span>,</span><br><span class="line">               TimeUnit.SECONDS, <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">       mTask.executeOnExecutor(exec);</span><br></pre></td></tr></table></figure>
+<h3 id="Tips_3A"><a href="#Tips_3A" class="headerlink" title="Tips:"></a>Tips:</h3><p>看文档是还看到关于其线程规则：</p>
+<h4 id="Threading_rules"><a href="#Threading_rules" class="headerlink" title="Threading rules"></a><strong>Threading rules</strong></h4><p>There are a few threading rules that must be followed for this class to work properly:</p>
+<ul>
+<li>The AsyncTask class must be loaded on the UI thread. This is done automatically as of JELLY_BEAN.</li>
+<li>The task instance must be created on the UI thread.<br>execute(Params…) must be invoked on the UI thread.</li>
+<li>Do not call onPreExecute(), onPostExecute(Result), doInBackground(Params…), onProgressUpdate(Progress…) manually.</li>
+<li>The task can be executed only once (an exception will be thrown if a second execution is attempted.)</li>
+</ul>
+<p>task需要实例化和调用必须载UI线程中,虽然还没碰到该问题，可以在出问题是作为error排查~</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/01/17/2015-01-17-android_ui_fit_baseline/" itemprop="url">
+                  [未完成]如何做androidUI适配的初期工作
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-01-17T00:00:00+08:00" content="2015-01-17">
+              2015-01-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/funny/" itemprop="url" rel="index">
+                    <span itemprop="name">funny</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>###关于Android设备适配<br><a href="https://developer.android.com/training/basics/supporting-devices/screens.html" target="_blank" rel="external">Android Developer 对适配的介绍</a>.<br>Android设备使用两个常规的属性:    </p>
+<ol>
+<li><strong>size</strong>“.（尺寸,3.5寸,5.0寸),对应在项目里 small, normal, large, xlarge;<br>资料上对其定义是:</li>
+</ol>
+<ul>
+<li>small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局尺寸大约是320x426dp。例如QVGA低分辨率和VGA高分辨率.  </li>
+<li>normal：这种屏类似中等分辨率的HVGA屏幕。对于普通屏幕的最小布局尺寸大约是320x470dp。如，WQVGA低分辨率屏、HVGA中等分辨率屏、WVGA高分辨率屏.  </li>
+<li>large：这种屏类似中等分辨率的VGA屏幕，对于大屏幕的最小布局尺寸大约是480x640dp。例如VGA和WVGA的中等分辨率屏.  </li>
+<li>xlarge：这种屏被认为比传统的中等分辨率的HVGA屏幕大。针对xlarge屏的最小布局尺寸大约是720x960dp。在大多数情况下，这种超大屏幕的设备因为太大而要放到背包中来携带，而且最有可能的是平板样式的设备。<br>注意：使用尺寸限定符不意味着资源仅用于这个尺寸的屏幕。如果没有用限定符提供与当前设备配置相匹配的可选资源，那么系统会使用与配置最接近的资源.   </li>
+</ul>
+<ol>
+<li><strong>density</strong>.(密度,160dpi,240dpi…),对应在项目里 low (ldpi), medium (mdpi), high (hdpi), extra high (xhdpi)。  </li>
+</ol>
+<p>###UI设计和适配原则</p>
+<p>#####1. 默认界面规格<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">320</span> * <span class="number">480</span>px(mdpi);   </span><br><span class="line"><span class="number">480</span> * <span class="number">800</span>px(hdpi);  </span><br><span class="line"><span class="number">720</span> * <span class="number">1280</span>px(xhdpi);</span><br></pre></td></tr></table></figure></p>
+<p>当然,这个标准是基于手机版本，对于如何简单兼容pad下面会提到下。</p>
+<p>#####2. 如何设计界面和定义标注尺寸<br>早几年前，我们一般都是按照480 <em> 800 px来设计;<br>随着Android设备的发展,目前让设计师基于720</em>1280px分辨率为基本尺寸设计,根据默认规格,dpi为320;<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">px = dip * density /<span class="number">160</span>;</span><br><span class="line"><span class="number">2</span>px = <span class="number">1</span>dip.</span><br></pre></td></tr></table></figure></p>
+<p>也就是基于360 * 640 dp规格设计。<br>设计师在做其他控件，字体大小注释时，可以直接从px-&gt;dp来标注(其实也可以直接px标注，但是考虑到后面我们需要简单的做pad的适配)，建议UI规范时已dp为单位。</p>
+<p>自此，我们基本解决了如何设计定义AndroidPhone规格和尺寸。</p>
+<p>#####3. 出现的问题<br>如果按照以上规格来设计，因为是基于320dpi(xhdpi)来开发。<br>一般UI实际完后，最后的素材其实是分为:<br><strong>图片（drawable）</strong><br><strong>尺寸值（dimen）</strong></p>
+<p>尺寸值上的适配我们基本根据设计规格360 * 640 </p>
+<p>Android3.2开始,引入了精确适配，理论上可以适配任意像素宽度，高度，屏幕密度的平台，<br>需用以下方式添加限定符<br>其中w1280dp表示屏幕宽度为1280dp，h752dp表示屏幕高度为752dp，160dpi表示屏幕密度，其中屏幕宽，高必须以dp为单位，在知道屏幕像素宽高度的情况下可以通过公式：1dp = （目标屏幕密度/标准密度）*px 转换成dp单位。</p>
+<ol>
+<li>lala  </li>
+<li>指导 <a href="http://developer.android.com/guide/practices/screens_support.html" target="_blank" rel="external">google 官方指导</a>.</li>
+<li>实践 <a href="https://developer.android.com/training/multiscreen/screensizes.html" target="_blank" rel="external">google 官方实践</a> </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   printf(<span class="string">"准备开始写博客了"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/12/01/2014-12-01mobile-nosql-db/" itemprop="url">
                   浅谈 NoSql for Android platform
                 </a>
               
@@ -309,8 +773,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2014-02-01T00:00:00+08:00" content="2014-02-01">
-              2014-02-01
+            <time itemprop="dateCreated" datetime="2014-12-01T00:00:00+08:00" content="2014-12-01">
+              2014-12-01
             </time>
           </span>
 
@@ -351,14 +815,14 @@
         
           <span itemprop="articleBody">
             
-              <p>###支持资料<br><a href="https://android-arsenal.com/tag/155" target="_blank" rel="external">Android Arsenal 站点关于几个Nosql的介绍.</a></p>
+              <h3 id="u652F_u6301_u8D44_u6599"><a href="#u652F_u6301_u8D44_u6599" class="headerlink" title="支持资料"></a>支持资料</h3><p><a href="https://android-arsenal.com/tag/155" target="_blank" rel="external">Android Arsenal 站点关于几个Nosql的介绍.</a></p>
 <ul>
 <li>Realm.</li>
 <li>SnappyDB.</li>
 <li>SimpleNoSql.</li>
 <li>couchbase</li>
 </ul>
-<p>###Why Use Nosql on Moblie Platform<br>说到在我们的mobile应用中使用Nosql需求: </p>
+<h3 id="Why_Use_Nosql_on_Moblie_Platform"><a href="#Why_Use_Nosql_on_Moblie_Platform" class="headerlink" title="Why Use Nosql on Moblie Platform"></a>Why Use Nosql on Moblie Platform</h3><p>说到在我们的mobile应用中使用Nosql需求: </p>
 <ol>
 <li><strong>第一是需要做数据缓存</strong>.</li>
 <li><strong>第二点是server使用的MongoDB</strong>.</li>
@@ -370,8 +834,8 @@
 <li>保持客户端和服务端数据存储模型的统一性,无需在设计关系型数据库模型(便洁)。</li>
 <li>相对来说直接文本和偏好存储，毕竟专业的nosql数据库具有更好更效率的数据操作。 </li>
 </ol>
-<p>###关于目前可用的几个Nosql数据的概述</p>
-<h2 id="23_23_23_23_23Reaml"><a href="#23_23_23_23_23Reaml" class="headerlink" title="#####Reaml"></a>#####<strong>Reaml</strong></h2><p> Realm ,支持Android和IOS+OSX，Realm for Android 2014.9.30,Realm相对来来说可能算是比较新的一个数据库框架。以Object或是Array形式对数据序列化存储，因为其早期开发的是IOS版本针对coredata存储的改进，所以基本概念中又很多ORM的感觉。<br> 根据<a href="http://realm.io/docs/java/0.78.0/" target="_blank" rel="external">Realm的官方文档</a>教程实践时一般会出现几个问题。  </p>
+<h3 id="u5173_u4E8E_u76EE_u524D_u53EF_u7528_u7684_u51E0_u4E2ANosql_u6570_u636E_u7684_u6982_u8FF0"><a href="#u5173_u4E8E_u76EE_u524D_u53EF_u7528_u7684_u51E0_u4E2ANosql_u6570_u636E_u7684_u6982_u8FF0" class="headerlink" title="关于目前可用的几个Nosql数据的概述"></a>关于目前可用的几个Nosql数据的概述</h3><h5 id="Reaml"><a href="#Reaml" class="headerlink" title="Reaml"></a><strong>Reaml</strong></h5><hr>
+<p> Realm ,支持Android和IOS+OSX，Realm for Android 2014.9.30,Realm相对来来说可能算是比较新的一个数据库框架。以Object或是Array形式对数据序列化存储，因为其早期开发的是IOS版本针对coredata存储的改进，所以基本概念中又很多ORM的感觉。<br> 根据<a href="http://realm.io/docs/java/0.78.0/" target="_blank" rel="external">Realm的官方文档</a>教程实践时一般会出现几个问题。  </p>
  <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caused <span class="keyword">by</span>: io.realm.exceptions.RealmException: Could <span class="keyword">not</span> find <span class="keyword">the</span> generated proxy  <span class="type">class</span>: Annotation processor may <span class="keyword">not</span> have been executed.</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>官方FAQ:<br>What does the exception ‘Annotation processor may not have been executed.’ mean?<br>During compilation of your app, the model classes are processed and proxy classes are generated. If this annotation process fails, the proxy classes or their methods cannot be found. When your app begins running, it Realm will throw exception with message ‘Annotation processor may not have been executed.’. You may see this in case you use Java 6 as it doesn’t support inheriting annotations. You then have to add @RealmClass before your models. Otherwise it can often be solved by removing/cleaning all generated or intermediate files and rebuild.<br>简单的说就是jdk&lt;7的情况下会出现该问题，需要在realmObject前添加注解@RealmClass.</p>
@@ -383,8 +847,10 @@
 <p>Tips:<br>Realm和Gson配合使用导致Gson resolve StackOverflowError；<br>官方解决  </p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Gson gson = <span class="keyword">new</span> GsonBuilder()</span><br><span class="line">                .setExclusionStrategies(<span class="keyword">new</span> ExclusionStrategy() &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="annotation">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">shouldSkipField</span><span class="params">(FieldAttributes f)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> f.getDeclaringClass().equals(RealmObject.class);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="annotation">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">shouldSkipClass</span><span class="params">(Class&lt;?&gt; clazz)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .create();</span><br><span class="line">        String json = <span class="string">"&#123; name : 'John', email : 'john@corporation.com' &#125;"</span>;</span><br><span class="line">        User user = gson.fromJson(json, User.class);</span><br></pre></td></tr></table></figure>
 <p>但是对于比较复杂的数据存储，比如需要支持对象里面包涵对象，该类也需要是先realmobject;比如list类型的需要是使用reaml提供的reamllist容器。</p>
-<h2 id="23_23_23_23_23SnappyDB"><a href="#23_23_23_23_23SnappyDB" class="headerlink" title="#####SnappyDB"></a>#####<strong>SnappyDB</strong> </h2><p>简单粗暴的kv存储模式，可以直接存储一个对象（其机制会帮助你序列化）.假设我有一个同类型的对象数据集，<br>那么只能以array形式存储；查询的时候目前只能根据key值来读取，假设我只需要读取array集合里的某个对象，<br>那么会再取出整个array集合，然后再自己检索（目前从提供的简单的API来看只支持key查询,有兴趣的可以看看具体代码），个人觉得，是sharepreference的一个加强版，从他测试的数据图来说，效率还可以,使用也很简单。</p>
-<h2 id="23_23_23_23_23couchbase"><a href="#23_23_23_23_23couchbase" class="headerlink" title="#####couchbase"></a>#####<strong>couchbase</strong></h2><p>从mobile平台的nosql数据库来看，couchbase算比较提及的比较多。<br>支持android，java，ios等多个平台和语言,基于文档形式的存储。<br>但是,其存储接口提供还是需要转为map才能存储，不支持直接JSON存储,虽然它提到最后是已JSON格式存储，<br>但是暴露在API接口上接受的是map。<br>文档默认都会生成一个_id,_rev字段,这在做缓存时会导致和我们本身的一些数据中的_id冲突(目前来看是_id被它自动覆盖了,并且只会发生在文档的最外层的_id)。<br>简单的解决方案是，在需要设置自己的_id时，在创建Document时使用 </p>
+<h5 id="SnappyDB"><a href="#SnappyDB" class="headerlink" title="SnappyDB"></a><strong>SnappyDB</strong></h5><hr>
+<p>简单粗暴的kv存储模式，可以直接存储一个对象（其机制会帮助你序列化）.假设我有一个同类型的对象数据集，<br>那么只能以array形式存储；查询的时候目前只能根据key值来读取，假设我只需要读取array集合里的某个对象，<br>那么会再取出整个array集合，然后再自己检索（目前从提供的简单的API来看只支持key查询,有兴趣的可以看看具体代码），个人觉得，是sharepreference的一个加强版，从他测试的数据图来说，效率还可以,使用也很简单。</p>
+<h5 id="couchbase"><a href="#couchbase" class="headerlink" title="couchbase"></a><strong>couchbase</strong></h5><hr>
+<p>从mobile平台的nosql数据库来看，couchbase算比较提及的比较多。<br>支持android，java，ios等多个平台和语言,基于文档形式的存储。<br>但是,其存储接口提供还是需要转为map才能存储，不支持直接JSON存储,虽然它提到最后是已JSON格式存储，<br>但是暴露在API接口上接受的是map。<br>文档默认都会生成一个_id,_rev字段,这在做缓存时会导致和我们本身的一些数据中的_id冲突(目前来看是_id被它自动覆盖了,并且只会发生在文档的最外层的_id)。<br>简单的解决方案是，在需要设置自己的_id时，在创建Document时使用 </p>
 <figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Document <span class="built_in">document</span> = database.getDocument(<span class="string">"myid2123"</span>);</span><br></pre></td></tr></table></figure>
 <p>基于自定义的_id来获取或创建一个Document,也就可以实现默认_id带来的问题，<br>当让前提是我们设计定义_id是需要有唯一性的。</p>
 <p>couchbase基本使用步骤:  </p>
@@ -397,7 +863,8 @@
 + step3:创建一条记录写入数据库
 </code></pre><p>Map<string, object=""> properties = new HashMap<string, object="">();<br>properties.put(“type”, “list”);<br>properties.put(“title”, title);<br>properties.put(“created_at”, currentTimeString);<br>properties.put(“owner”, “profile:” + userId);<br>properties.put(“members”, new<br>ArrayList<string>());<br>Document document = database.createDocument();<br>document.putProperties(properties);<br> ````  </string></string,></string,></p>
 <p>具体的深度则可以考虑如何处理并发,锁机制,索引，视图等概念。</p>
-<h2 id="23_23_23_23_23SimpleNoSql"><a href="#23_23_23_23_23SimpleNoSql" class="headerlink" title="#####SimpleNoSql"></a>#####<strong>SimpleNoSql</strong></h2><p>略，直接看<a href="https://github.com/Jearil/SimpleNoSQL" target="_blank" rel="external">其github和文档</a></p>
+<h5 id="SimpleNoSql"><a href="#SimpleNoSql" class="headerlink" title="SimpleNoSql"></a><strong>SimpleNoSql</strong></h5><hr>
+<p>略，直接看<a href="https://github.com/Jearil/SimpleNoSQL" target="_blank" rel="external">其github和文档</a></p>
 
             
           </span>
@@ -461,14 +928,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">分类</span>
               
           </div>
