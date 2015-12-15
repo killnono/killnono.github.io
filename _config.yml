@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Dev
 subtitle:
 description:
-author: John Doe
+author: kill nono
 language:
 timezone:
 
@@ -68,4 +68,6 @@ theme: landscape
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: github
+  repository: git@github.com:killnono/killnono.github.io.git
+  branch: master
