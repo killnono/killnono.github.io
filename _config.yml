@@ -7,7 +7,8 @@ title: Dev
 subtitle:
 description:
 author: kill nono
-language:
+language: zh-Hans
+avatar: /uploads/avatar.jpeg
 timezone:
 
 # URL
@@ -63,11 +64,11 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: github
-  repository: git@github.com:killnono/killnono.github.io.git
+  type: git
+  repository: http://github.com/killnono/killnono.github.io.git
   branch: master
