@@ -51,31 +51,22 @@
 
 
 
-<meta name="description" content="###关于Android设备适配Android Developer 对适配的介绍.Android设备使用两个常规的属性:    
-
-size“.（尺寸,3.5寸,5.0寸),对应在项目里 small, normal, large, xlarge;资料上对其定义是:
-
-
-small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局尺寸大约是320x426dp。例如QVGA低分辨率和VGA高分辨率">
+<meta name="description" content="内存泄露和内存优化个人感觉内存的优化，更多的是体现在编码过程中的一种策略。包括使用轻量级数据结构，合理的缓存机制，重用机制，bitmap胖子的合理缩放和解码等.这类型的文章有很多，也介绍的很全面很有用。（占位符，等放链接）
+内存泄漏则更偏向于编码时的不严谨和对系统一些机制的疏忽。keep context could release , cursor 或 I／O的即时释放,bitmap的释放。
+当然">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[未完成]如何做androidUI适配的初期工作">
-<meta property="og:url" content="http://yoursite.com/2015/01/17/2015-01-17-android_ui_fit_baseline/index.html">
+<meta property="og:title" content="Android内存泄漏和leakcanary工具">
+<meta property="og:url" content="http://yoursite.com/2015/12/01/2015-12-01-内存泄漏和leakcanary工具/index.html">
 <meta property="og:site_name" content="Dev">
-<meta property="og:description" content="###关于Android设备适配Android Developer 对适配的介绍.Android设备使用两个常规的属性:    
-
-size“.（尺寸,3.5寸,5.0寸),对应在项目里 small, normal, large, xlarge;资料上对其定义是:
-
-
-small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局尺寸大约是320x426dp。例如QVGA低分辨率和VGA高分辨率">
-<meta property="og:updated_time" content="2015-12-15T04:57:58.000Z">
+<meta property="og:description" content="内存泄露和内存优化个人感觉内存的优化，更多的是体现在编码过程中的一种策略。包括使用轻量级数据结构，合理的缓存机制，重用机制，bitmap胖子的合理缩放和解码等.这类型的文章有很多，也介绍的很全面很有用。（占位符，等放链接）
+内存泄漏则更偏向于编码时的不严谨和对系统一些机制的疏忽。keep context could release , cursor 或 I／O的即时释放,bitmap的释放。
+当然">
+<meta property="og:updated_time" content="2015-12-15T08:30:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[未完成]如何做androidUI适配的初期工作">
-<meta name="twitter:description" content="###关于Android设备适配Android Developer 对适配的介绍.Android设备使用两个常规的属性:    
-
-size“.（尺寸,3.5寸,5.0寸),对应在项目里 small, normal, large, xlarge;资料上对其定义是:
-
-
-small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局尺寸大约是320x426dp。例如QVGA低分辨率和VGA高分辨率">
+<meta name="twitter:title" content="Android内存泄漏和leakcanary工具">
+<meta name="twitter:description" content="内存泄露和内存优化个人感觉内存的优化，更多的是体现在编码过程中的一种策略。包括使用轻量级数据结构，合理的缓存机制，重用机制，bitmap胖子的合理缩放和解码等.这类型的文章有很多，也介绍的很全面很有用。（占位符，等放链接）
+内存泄漏则更偏向于编码时的不严谨和对系统一些机制的疏忽。keep context could release , cursor 或 I／O的即时释放,bitmap的释放。
+当然">
 
 
 
@@ -87,7 +78,7 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
   };
 </script>
 
-  <title> [未完成]如何做androidUI适配的初期工作 | Dev </title>
+  <title> Android内存泄漏和leakcanary工具 | Dev </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -207,7 +198,7 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
             
             
               
-                [未完成]如何做androidUI适配的初期工作
+                Android内存泄漏和leakcanary工具
               
             
           </h1>
@@ -216,26 +207,11 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-01-17T00:00:00+08:00" content="2015-01-17">
-              2015-01-17
+            <time itemprop="dateCreated" datetime="2015-12-01T00:00:00+08:00" content="2015-12-01">
+              2015-12-01
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/funny/" itemprop="url" rel="index">
-                    <span itemprop="name">funny</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
@@ -255,34 +231,19 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
       
 
       
-        <span itemprop="articleBody"><p>###关于Android设备适配<br><a href="https://developer.android.com/training/basics/supporting-devices/screens.html" target="_blank" rel="external">Android Developer 对适配的介绍</a>.<br>Android设备使用两个常规的属性:    </p>
-<ol>
-<li><strong>size</strong>“.（尺寸,3.5寸,5.0寸),对应在项目里 small, normal, large, xlarge;<br>资料上对其定义是:</li>
-</ol>
+        <span itemprop="articleBody"><h3 id="u5185_u5B58_u6CC4_u9732_u548C_u5185_u5B58_u4F18_u5316"><a href="#u5185_u5B58_u6CC4_u9732_u548C_u5185_u5B58_u4F18_u5316" class="headerlink" title="内存泄露和内存优化"></a>内存泄露和内存优化</h3><p>个人感觉内存的优化，更多的是体现在编码过程中的一种策略。<br>包括使用轻量级数据结构，合理的缓存机制，重用机制，bitmap胖子的合理缩放和解码等.<br>这类型的文章有很多，也介绍的很全面很有用。（占位符，等放链接）</p>
+<p>内存泄漏则更偏向于编码时的不严谨和对系统一些机制的疏忽。<br>keep context could release , cursor 或 I／O的即时释放,bitmap的释放。</p>
+<p>当然两者，优化和避免泄漏都是为了防止oom，提升app的性能和质量。</p>
+<h3 id="u5185_u5B58_u6CC4_u6F0F"><a href="#u5185_u5B58_u6CC4_u6F0F" class="headerlink" title="内存泄漏"></a>内存泄漏</h3><p>提到内存泄漏，是在开发中很容易被忽视的一个问题，谁让我们对java自动回收的固有影响，觉得java开发根本无需太注意内存管理的问题，却忘了GC的机制和原理。<br>现在Android开发中最普遍的泄漏，便是Activity的泄漏。<br>keep context could release，一般指的是在activity finish时，能保证其的正常回收。</p>
 <ul>
-<li>small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局尺寸大约是320x426dp。例如QVGA低分辨率和VGA高分辨率.  </li>
-<li>normal：这种屏类似中等分辨率的HVGA屏幕。对于普通屏幕的最小布局尺寸大约是320x470dp。如，WQVGA低分辨率屏、HVGA中等分辨率屏、WVGA高分辨率屏.  </li>
-<li>large：这种屏类似中等分辨率的VGA屏幕，对于大屏幕的最小布局尺寸大约是480x640dp。例如VGA和WVGA的中等分辨率屏.  </li>
-<li>xlarge：这种屏被认为比传统的中等分辨率的HVGA屏幕大。针对xlarge屏的最小布局尺寸大约是720x960dp。在大多数情况下，这种超大屏幕的设备因为太大而要放到背包中来携带，而且最有可能的是平板样式的设备。<br>注意：使用尺寸限定符不意味着资源仅用于这个尺寸的屏幕。如果没有用限定符提供与当前设备配置相匹配的可选资源，那么系统会使用与配置最接近的资源.   </li>
+<li>最常见一种情况是匿名内部类，比如handler的问题，其实现在AS的lint插件已经会给用户做Warning提醒，警告用户可能造成内存泄漏，比如一个消息事件生命周期过长，activity执行了finish后，消息持用其引用，造成资源无法释放，网上也基本建议使用静态内部类或是持用acitivty的软引用。</li>
+<li>另一个很常见的情况是传递Activity的上下文。很多时候初始化一个全局啊单例时，需要接受一个上下文对象。如果传入的context时activity，那么也很有可能造成该activity无法释放了。因此在出现这类型的初始化传递时，避免直接传递acticity的context，而是application的context。</li>
 </ul>
-<ol>
-<li><strong>density</strong>.(密度,160dpi,240dpi…),对应在项目里 low (ldpi), medium (mdpi), high (hdpi), extra high (xhdpi)。  </li>
-</ol>
-<p>###UI设计和适配原则</p>
-<p>#####1. 默认界面规格<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">320</span> * <span class="number">480</span>px(mdpi);   </span><br><span class="line"><span class="number">480</span> * <span class="number">800</span>px(hdpi);  </span><br><span class="line"><span class="number">720</span> * <span class="number">1280</span>px(xhdpi);</span><br></pre></td></tr></table></figure></p>
-<p>当然,这个标准是基于手机版本，对于如何简单兼容pad下面会提到下。</p>
-<p>#####2. 如何设计界面和定义标注尺寸<br>早几年前，我们一般都是按照480 <em> 800 px来设计;<br>随着Android设备的发展,目前让设计师基于720</em>1280px分辨率为基本尺寸设计,根据默认规格,dpi为320;<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">px = dip * density /<span class="number">160</span>;</span><br><span class="line"><span class="number">2</span>px = <span class="number">1</span>dip.</span><br></pre></td></tr></table></figure></p>
-<p>也就是基于360 * 640 dp规格设计。<br>设计师在做其他控件，字体大小注释时，可以直接从px-&gt;dp来标注(其实也可以直接px标注，但是考虑到后面我们需要简单的做pad的适配)，建议UI规范时已dp为单位。</p>
-<p>自此，我们基本解决了如何设计定义AndroidPhone规格和尺寸。</p>
-<p>#####3. 出现的问题<br>如果按照以上规格来设计，因为是基于320dpi(xhdpi)来开发。<br>一般UI实际完后，最后的素材其实是分为:<br><strong>图片（drawable）</strong><br><strong>尺寸值（dimen）</strong></p>
-<p>尺寸值上的适配我们基本根据设计规格360 * 640 </p>
-<p>Android3.2开始,引入了精确适配，理论上可以适配任意像素宽度，高度，屏幕密度的平台，<br>需用以下方式添加限定符<br>其中w1280dp表示屏幕宽度为1280dp，h752dp表示屏幕高度为752dp，160dpi表示屏幕密度，其中屏幕宽，高必须以dp为单位，在知道屏幕像素宽高度的情况下可以通过公式：1dp = （目标屏幕密度/标准密度）*px 转换成dp单位。</p>
-<ol>
-<li>lala  </li>
-<li>指导 <a href="http://developer.android.com/guide/practices/screens_support.html" target="_blank" rel="external">google 官方指导</a>.</li>
-<li>实践 <a href="https://developer.android.com/training/multiscreen/screensizes.html" target="_blank" rel="external">google 官方实践</a> </li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   printf(<span class="string">"准备开始写博客了"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u5F00_u53D1_u4E2D_u9047_u5230_u7684_u4E00_u4E2A_u5185_u5B58_u6CC4_u6F0F_u95EE_u9898"><a href="#u5F00_u53D1_u4E2D_u9047_u5230_u7684_u4E00_u4E2A_u5185_u5B58_u6CC4_u6F0F_u95EE_u9898" class="headerlink" title="开发中遇到的一个内存泄漏问题"></a>开发中遇到的一个内存泄漏问题</h3><p>其实对于现在IDE的越来越智能，代码静态检测工具就可以帮我们检测到许多内存泄漏问题。根据泄漏的严重性和处理的惰性做一个平衡～忽略了一些<strong>伪泄漏</strong>（个人把类似于handler那一类型的延迟释放&lt;当然前提是能释放！&gt;戏称为此）。<br>还有如后台请求持用上下文，也可能造成的伪泄漏。<br>伪泄漏在很多时候可能无法暴露问题。但是也是一个需要注意的点。</p>
+<p>但是在上期迭代中，引发了一个真泄漏（真的泄漏了。。）的情况。<br>迭代后期想做性能分析优化时，观察ddms memory,发现内存异常高。一开始以为是页面有大量图片原因，造成加载了这些页面后内存上升。然后先做图片加载优化啊，手动释放啊，手动GC啊啥的,但是后来操作发现，然并卵，finish了这些acitivty后，内存基本没下降释放。以至于最后第三方测试反馈报告显示，最高内存占用快1-200mb了。然后想到了以前简单使用过的内存检测工具<strong>Leakcanary</strong>.一检测发现，一个全局的Taskmanager持用一个类似于列表列表的引用，队列列表持用task引用，task持用activity的context。Ok，当时我的第一反应是我把context改成</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context = getApplicationContext();</span><br><span class="line">BaseTask task = <span class="keyword">new</span> Task1(context,arg1,arg2);</span><br></pre></td></tr></table></figure>
+<p>然后发现，好像没用啊！！回过来在看leak的log，发现是说task中的一个callback持有了activity，callback是activity中的一个匿名内部类传递到了task中。<br>于是就好玩了。首先，这个情况变成了匿名内部类泄漏，但是从过程来看，是个伪泄漏啊。不就是假设我的task在队列里，造成activity无法马上释放么？理论上来说，稍等一段时间，不就能释放了（而且同事还做了一个类似于task cancel的接口，在finish的情况下可以取消task），不就完美释放了么？<br>ok，回到最初的点来：<br>Taskmanager持用一个类似于列表列表的引用，cancel一个task会remove掉，但是如果是task done，没有做remove～现在的情况是，假设我的一个拥有很多bitmap的activity，发起了一个task，正常结束，然后这个task的引用还在manger的队列列表，没有被移除～。</p>
+<h3 id="u5B89_u5229_u5DE5_u5177LeakCanary"><a href="#u5B89_u5229_u5DE5_u5177LeakCanary" class="headerlink" title="安利工具LeakCanary"></a>安利工具LeakCanary</h3><p><a href="https://github.com/square/leakcanary" target="_blank" rel="external">LeakCanary github</a><br>基础使用十分简单，个人觉得功能很强大，可以帮你找出很出泄漏风险。</p>
 </span>
       
     </div>
@@ -294,17 +255,13 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/12/01/2014-12-01mobile-nosql-db/" rel="next" title="浅谈 NoSql for Android platform">
-                <i class="fa fa-chevron-left"></i> 浅谈 NoSql for Android platform
+              <a href="/2015/04/22/2015-04-22-ycmath_1.2/" rel="next" title="洋葱数学Android V1.2版本总结">
+                <i class="fa fa-chevron-left"></i> 洋葱数学Android V1.2版本总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/01/22/2015-01-22-tiny-about-AsyncTask/" rel="prev" title="关于AsyncTask造成阻塞问题">
-                关于AsyncTask造成阻塞问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -418,7 +375,7 @@ small：这种屏类似低分辨率的QVGA屏幕。对于小屏的最小布局�
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u5185_u5B58_u6CC4_u9732_u548C_u5185_u5B58_u4F18_u5316"><span class="nav-number">1.</span> <span class="nav-text">内存泄露和内存优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5185_u5B58_u6CC4_u6F0F"><span class="nav-number">2.</span> <span class="nav-text">内存泄漏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5F00_u53D1_u4E2D_u9047_u5230_u7684_u4E00_u4E2A_u5185_u5B58_u6CC4_u6F0F_u95EE_u9898"><span class="nav-number">3.</span> <span class="nav-text">开发中遇到的一个内存泄漏问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5B89_u5229_u5DE5_u5177LeakCanary"><span class="nav-number">4.</span> <span class="nav-text">安利工具LeakCanary</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
